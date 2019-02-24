@@ -1,0 +1,52 @@
+void Update () {
+        if (canActivate && Input.GetButtonDown("Fire1") && !DialogManager.instance.dialogBox.activeInHierarchy)
+        {
+            switch (progressCounter)
+           {
+               
+                case 0:
+                    lines = IntroQuest;
+                    DialogManager.instance.ShowDialog(lines);                
+                    progressCounter++;
+                    break;
+            
+                case 1:
+                    lines = InProgressQuest1;
+                    DialogManager.instance.ShowDialog(lines);
+                     progressCounter++;
+                    break;
+
+                case 2:
+                    lines = Quest1Complete;
+                    DialogManager.instance.ShowDialog(lines);
+                    progressCounter++;
+                    break;
+
+                case 3:
+                    lines = InprogressQuest2;
+                    DialogManager.instance.ShowDialog(lines);
+                    progressCounter++;
+                    break;
+
+                case 4:
+                    lines = Quest2Complete;
+                    DialogManager.instance.ShowDialog(lines);
+                    progressCounter++;
+                    break;
+                case 5:
+                    lines = InprogressQuest3;
+                    DialogManager.instance.ShowDialog(lines);
+                     progressCounter++;
+                    break;
+                case 6:
+                    lines = Quest3Complete;
+                    DialogManager.instance.ShowDialog(lines);
+                    progressCounter++;
+                    break;
+                case 7:
+                    lines = AllQuestsComplete;
+                    DialogManager.instance.ShowDialog(lines);
+                    break;
+            }
+        }
+	}
