@@ -1,0 +1,57 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class QuestManager : MonoBehaviour {
+
+    public QuestGiverInfo[] questGivers;
+    public int[] progressCounterStore;
+
+    public static QuestManager instance;
+    // Use this for initialization
+    void Start () {
+        instance = this;
+        progressCounterStore = new int[questGivers.Length];
+    }
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+    public void StoreQuestProgress()
+    {
+        for (int i = 0; i < questGivers.Length; i++)
+        {
+            if (questGivers[i].gameObject.activeInHierarchy)
+            {
+                progressCounterStore[i] = questGivers[i].GetComponent<QuestGiverInfo>().progressCounter;
+            }
+        }
+    }
+
+    public void SetQuestProgress()
+    {
+        for (int i = 0; i < questGivers.Length; i++)
+        {
+
+            if (questGivers[i].gameObject.activeInHierarchy)
+            {
+                print(i);
+                questGivers[i].GetComponent<QuestGiverInfo>().progressCounter = progressCounterStore[i];
+            }
+        }
+    }
+
+    public void CheckifQuestProgress(DialogActivator sendingNPC)
+    {
+        if (DialogManager.instance.dialogLines[DialogManager.instance.currentLine].StartsWith("QP- "))
+        {
+            string questProgressString = DialogManager.instance.dialogLines[DialogManager.instance.currentLine].Replace("QP- ", "");
+            int questProgress = int.Parse(questProgressString);
+            sendingNPC.progressCounter = questProgress;
+            DialogManager.instance.dialogBox.SetActive(false);
+            GameManager.instance.dialogActive = false;
+        }
+    }
+
+}
