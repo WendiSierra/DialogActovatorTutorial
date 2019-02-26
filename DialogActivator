@@ -1,0 +1,113 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DialogActivator : MonoBehaviour {
+
+    public string questGiverName;
+
+    public int progressCounter;
+    public string[] lines;
+    public string[] IntroQuest;
+    public string[] InProgressQuest1;
+    public string[] Quest1Complete;
+    public string[] InprogressQuest2;
+    public string[] Quest2Complete;
+    public string[] InprogressQuest3;
+    public string[] Quest3Complete;
+    public string[] AllQuestsComplete; 
+    
+    private bool canActivate;
+    private QuestGiverInfo thisNPC;
+    
+	// Use this for initialization
+	void Start () {
+        //whenever this object becomes active in a scene, we want to reassociate it with the correct QuestGiver Object on the Quest Manager
+        for (int i = 0; i < QuestManager.instance.questGivers.Length; i++)
+        {
+            if (questGiverName == QuestManager.instance.questGivers[i].questGiverName)
+            {
+                //first, we'll set our progress counter to equal whatever it is on that array. 
+                //This will help when we transition between scenes, as the QuestGiver will be storing our correct progress
+              progressCounter =  QuestManager.instance.questGivers[i].GetComponent<QuestGiverInfo>().progressCounter;
+                //Now we'll write a line that will easily let us reference the correct QuestGiver on the Quest management script
+                //this will save us from having to write out the GetComponent line over and over
+              thisNPC = QuestManager.instance.questGivers[i].GetComponent<QuestGiverInfo>();
+            }
+        }
+
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        if (canActivate && Input.GetButtonDown("Fire1") && !DialogManager.instance.dialogBox.activeInHierarchy)
+        {
+            //we know the first thing we want to do is check thisNPC to see what quest stage we should be on
+            progressCounter = thisNPC.progressCounter;
+            
+            //now, we simply use a switch case to show the correct dialog
+            switch (progressCounter)
+           {
+               
+                case 0:
+                    lines = IntroQuest;
+                    DialogManager.instance.ShowDialog(lines, this);                
+                    progressCounter++;
+                    thisNPC.questToActivate = 1;
+                    thisNPC.ActivateQuests();
+                    break;
+            
+                case 1:
+                    lines = InProgressQuest1;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    break;
+
+                case 2:
+                    lines = Quest1Complete;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    progressCounter++;
+                    thisNPC.questToActivate = 2;
+                    thisNPC.ActivateQuests();
+                    break;
+
+                case 3:
+                    lines = InprogressQuest2;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    break;
+
+                case 4:
+                    lines = Quest2Complete;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    progressCounter++;
+                    thisNPC.questToActivate = 3;
+                    thisNPC.ActivateQuests();
+                    break;
+                case 5:
+                    lines = InprogressQuest3;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    
+                    break;
+                case 6:
+                    lines = Quest3Complete;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    progressCounter++;
+                    break;
+                case 7:
+                    lines = AllQuestsComplete;
+                    DialogManager.instance.ShowDialog(lines, this);
+                    break;
+            }
+            thisNPC.progressCounter = progressCounter;
+        }
+	}
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        canActivate = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        canActivate = false;
+    }
+}
