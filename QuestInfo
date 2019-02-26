@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class QuestInfo : MonoBehaviour {
+
+    public string questName;
+    public bool isComplete;
+    public int questProgress;
+
+    public bool isActive;
+    public bool isCollect;
+    public bool isDeliver;
+    public bool isLocation;
+
+    public string collectObject; //this is the object we will collect
+    public int collectCounter = 0; //this is our counter keeping track of how many we have
+    public int targetNumber; //this is the number we want to collect
+    private int position;
+
+	// Use this for initialization
+	void Start () {//in this statement we compare this object's quest name to the quest names in its parent to find out what position it is
+                //we use this position later to change the quest complete bool on the parent and update the progress counter
+        for (int i = 0; i < GetComponentInParent<QuestGiverInfo>().questNames.Length; i++)
+        {
+            if (questName == GetComponentInParent<QuestGiverInfo>().questNames[i])
+            {
+                position = i;
+            }
+        }
+	}
+	
+	// Update is called once per frame
+	void Update () {
+       
+	}
+
+    public void UpdateCollectQuest()
+    {
+        if (isActive)
+        {
+            collectCounter++;
+            if (collectCounter == targetNumber)
+            {
+                isComplete = true;
+            }
+
+            if (isComplete)
+            {
+                GetComponentInParent<QuestGiverInfo>().questComplete[position] = true;
+                GetComponentInParent<QuestGiverInfo>().progressCounter = questProgress;
+               isActive = false;
+            }
+
+        }
+    }
+
+}
