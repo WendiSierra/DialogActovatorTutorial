@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class QuestGiverInfo : MonoBehaviour {
+
+    public int progressCounter; //this will be used to send progress info to the Dialog Activator
+    public string questGiverName; //This will be used to associate the correct QuestGiverInfo script with the Dialog Activator script (by checking for matching strings)
+    public int questToActivate; //This lets us know which quest should be active
+
+    public QuestInfo[] quests; //This array stores all our QuestInfo objects
+    public string[] neededItems; //This stores the names of the items needed for these quests
+    public string[] questNames; //This is used to associate the correct quest (via string comparison)
+    public bool[] questComplete; //this marks our quest as complete
+
+
+
+    // Use this for initialization
+    void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        
+	}
+
+    public void ActivateQuests()
+    {
+        switch (questToActivate)
+        { //This lets us set specific quests in our array as active
+            case 0:
+                break;
+            case 1:
+                quests[0].isActive = true;
+                break;
+            case 2:
+                quests[1].isActive = true;
+                break;
+            case 3:
+                quests[2].isActive = true;
+                break;
+        }
+    }
+
+    public void CheckQuestItems(string itemPickedUp)
+    { this is run after an item is picked up and checks if it is an item needed for a quests
+        for (int i = 0; i < neededItems.Length; i++)
+        {
+            if (itemPickedUp == neededItems[i] && (quests[i].isActive))
+            {
+                quests[i].UpdateCollectQuest();
+            }
+        }
+    }
+}
